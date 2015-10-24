@@ -1,0 +1,52 @@
+#!/bin/bash
+
+CURL=XXCURLLOCATIONXX
+
+SKETCH=1
+
+FORMOPT=
+TYPEFORM=
+stat() {
+  if [ -z "$FORMOPT" ]
+  then
+    if /usr/bin/stat --version >/dev/null 2>&1
+    then
+      FORMOPT=--format
+      TYPEFORM=%F
+    else
+      FORMOPT=-f
+      TYPEFORM=%HT
+    fi
+  fi
+  case $1 in
+    type) FORMARG="$FORMOPT $TYPEFORM" ; shift ;;
+  esac
+  /usr/bin/stat -L $FORMARG "$@"
+}
+
+exec 9>&1
+case $(stat type /dev/fd/9) in
+  [Ff]ifo*) : ;;
+  *) exec $CURL "$@" ;;
+esac
+
+# If we have a terminal, check for that.
+if test -t 0
+then
+
+    # get our terminal
+    t=$(tty) ; t=${t/\/dev\/} ; t=${t/tty/}
+    ps auxww | egrep '[[:space:]][[:space:]]*sudo[[:space:]][[:space:]]*.*(ba|z|tc|c)?sh' | egrep -q " $t "
+    SKETCH=$?
+else
+    ps axww | egrep -q '[[:space:]][[:space:]]*sudo[[:space:]][[:space:]]*.*(ba|z|tc|c)?sh'
+    SKETCH=$?
+fi
+
+
+if [ ${SKETCH} -eq 1 ]
+then
+    exec $CURL "$@"
+else
+    echo "echo 'Seriously, stop using curl pipe sudo bash.'"
+fi

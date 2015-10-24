@@ -2,7 +2,7 @@
 
 set -e
 
-gitrawurl='http://legit.pw/magiccurl'
+gitrawurl='https://raw.githubusercontent.com/barn/curlbrash/master/curlbrash'
 
 if [ $(id -u) -ne 0 ]
 then
