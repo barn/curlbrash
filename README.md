@@ -9,7 +9,7 @@ See [my presentation from LASCON 2015](https://speakerdeck.com/barnbarn/security
 Ironically:
 
 ```bash
-curl -s http://legit.pw/install.sh | sudo sh
+curl -s https://raw.githubusercontent.com/barn/curlbrash/master/install.sh | sudo sh
 ```
 
 Yup!
